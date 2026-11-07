@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Profesor Carlos">
+  <title>Profesor Carlos Velilla — Aula y Consultor IA</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --accent: #f59e0b;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 50px; min-height: 100vh; }
+    header { background: linear-gradient(135deg, #1e3a8a, #0f172a); padding: 24px 20px 20px; border-bottom: 1px solid var(--card-border); position: sticky; top: 0; z-index: 100; }
+    .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 650px; margin: 0 auto; }
+    .badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    main { max-width: 650px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 22px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); }
+    h1 { font-size: 1.35rem; font-weight: 700; margin-top: 4px; }
+    h2 { font-size: 1.15rem; color: #93c5fd; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    p { font-size: 0.95rem; line-height: 1.5; color: var(--text-muted); }
+    
+    /* Timer Widget */
+    .timer-box { text-align: center; padding: 25px 15px; }
+    .timer-display { font-size: 4rem; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--accent); margin: 10px 0; letter-spacing: -2px; }
+    .timer-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+    .btn { background: var(--primary-light); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+    .btn:active { transform: scale(0.96); }
+    .btn-secondary { background: #334155; color: var(--text); }
+    .btn-success { background: var(--success); }
+    
+    /* Files & Concepts */
+    .file-item { display: flex; align-items: center; justify-content: space-between; background: #0f172a; padding: 14px 16px; border-radius: 10px; margin-top: 10px; text-decoration: none; color: var(--text); border: 1px solid #1e293b; transition: all 0.2s; }
+    .file-item:hover { border-color: var(--primary-light); background: #131d38; }
+    .concept-item { font-size: 0.92rem; line-height: 1.45; padding: 10px 14px; background: rgba(59, 130, 246, 0.08); border-left: 3px solid var(--primary-light); border-radius: 0 8px 8px 0; margin-top: 8px; color: #e2e8f0; }
+
+    /* Explicador Desplegable */
+    .expand-btn { background: #1e293b; border: 1px solid #3b82f6; color: #93c5fd; padding: 12px 16px; border-radius: 10px; width: 100%; text-align: left; font-size: 0.95rem; font-weight: 600; margin-top: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .expand-body { background: #0b1120; border: 1px solid #1e293b; border-top: none; padding: 14px 16px; border-radius: 0 0 10px 10px; display: none; font-size: 0.92rem; line-height: 1.6; color: #cbd5e1; }
+
+    /* Consultor IA en Vivo */
+    .chat-box { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+    .chat-input-row { display: flex; gap: 8px; }
+    .chat-input { flex: 1; background: #0f172a; border: 1px solid #334155; color: white; padding: 12px 14px; border-radius: 10px; font-size: 0.95rem; }
+    .chat-input:focus { outline: none; border-color: var(--primary-light); }
+    .ai-reply { background: rgba(59, 130, 246, 0.12); border: 1px solid #2563eb; padding: 14px; border-radius: 10px; font-size: 0.92rem; line-height: 1.5; color: #e2e8f0; margin-top: 10px; display: none; }
+
+    /* Quiz Widget */
+    .quiz-card { display: none; }
+    .q-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 18px; line-height: 1.4; }
+    .options-list { display: flex; flex-direction: column; gap: 10px; }
+    .opt-btn { background: #0f172a; border: 1px solid var(--card-border); color: var(--text); padding: 14px 16px; border-radius: 12px; font-size: 0.95rem; text-align: left; cursor: pointer; transition: all 0.2s; line-height: 1.35; }
+    .opt-btn:active { background: #1e293b; }
+    .opt-btn.correct { background: rgba(16, 185, 129, 0.2) !important; border-color: var(--success) !important; color: #6ee7b7 !important; font-weight: 600; }
+    .opt-btn.wrong { background: rgba(239, 68, 68, 0.2) !important; border-color: var(--danger) !important; color: #fca5a5 !important; }
+    .explanation { margin-top: 16px; padding: 14px; border-radius: 10px; font-size: 0.9rem; background: #0f172a; border: 1px solid #334155; display: none; line-height: 1.45; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-content">
+      <div>
+        <span class="badge" id="day-badge">Plan Sistemas · Clase 1</span>
+        <h1>Profesor Carlos Velilla</h1>
+      </div>
+      <div style="font-size: 2.2rem;">👨‍🏫</div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Módulo Clase de Hoy -->
+    <section class="card" id="lesson-card">
+      <h2><span>📖</span> Clase de Hoy: Tema Oficial</h2>
+      <h3 style="font-size: 1.25rem; margin-bottom: 8px; color: #f8fafc;">B4-T7 — Modelo TCP/IP, IPv6 y Protocolos</h3>
+      <p>Esquemas ultra-reducidos de Carlos Velilla con soporte de explicaciones paso a paso.</p>
+
+      <div style="margin-top: 18px;">
+        <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px;">PDFs Directos de Carlos:</span>
+        <div>
+          <a class="file-item" href="/files/05%20Bloque%204%20-%20Sistemas/B4-T7.1-TCP%20IP.pdf" target="_blank">
+            <span>📄 B4-T7.1-TCP IP.pdf (Esquema principal, 5 págs)</span>
+            <span style="color: #60a5fa; font-weight: 600;">Abrir ↗</span>
+          </a>
+          <a class="file-item" href="/files/05%20Bloque%204%20-%20Sistemas/B4-T7.1-TCP%20IP%20-%20IPv6.pdf" target="_blank">
+            <span>📄 B4-T7.1-TCP IP - IPv6.pdf (Documento IPv6)</span>
+            <span style="color: #60a5fa; font-weight: 600;">Abrir ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- DESGLOSE DETALLADO DE CONCEPTOS REDUCIDOS -->
+      <div style="margin-top: 24px;">
+        <span style="font-size: 0.82rem; text-transform: uppercase; color: #93c5fd; font-weight: 700; letter-spacing: 0.5px;">🔍 Explicador de Puntos Críticos del Esquema:</span>
+        <p style="font-size: 0.88rem; margin-top: 4px;">Toca cualquier concepto del PDF para ver su explicación completa desarrollada:</p>
+        
+        <div id="explanations-container"></div>
+      </div>
+
+      <!-- CONSULTOR IA EN VIVO -->
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--card-border);">
+        <h2 style="font-size: 1.05rem;"><span>🤖</span> Consultar duda sobre el esquema:</h2>
+        <p style="font-size: 0.88rem;">Escribe cualquier duda (ej: <i>¿Qué es MSS?</i>, <i>¿Diferencia entre SNAT y DNAT?</i>, <i>¿Qué puerto usa OSPF?</i>):</p>
+        <div class="chat-box">
+          <div class="chat-input-row">
+            <input type="text" id="ai-query" class="chat-input" placeholder="Pregunta al profesor cualquier duda..." onkeypress="if(event.key==='Enter') askAI()">
+            <button class="btn" onclick="askAI()">Consultar</button>
+          </div>
+          <div class="ai-reply" id="ai-response"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Módulo Cronómetro de Estudio -->
+    <section class="card timer-box" id="timer-card">
+      <div class="timer-label">Tiempo de Estudio Concentrado</div>
+      <div class="timer-display" id="time-display">25:00</div>
+      <p style="font-size: 0.88rem; max-width: 480px; margin: 0 auto;"><b>Regla de Carlos:</b> Lee para entender la lógica global. Los datos duros se graban con el repaso espaciado.</p>
+      
+      <div class="btn-group">
+        <button class="btn" id="start-btn" onclick="toggleTimer()">▶ Comenzar Estudio</button>
+        <button class="btn btn-secondary" onclick="resetTimer()">↺ Reiniciar</button>
+        <button class="btn btn-success" onclick="goToQuiz()">Hacer el Test del Profesor ➔</button>
+      </div>
+    </section>
+
+    <!-- Módulo Test del Profesor -->
+    <section class="card quiz-card" id="quiz-card">
+      <h2><span>📝</span> Evaluación Oficial del Minitema</h2>
+      <p style="margin-bottom: 16px;">Preguntas oficiales del INAP extraídas de exámenes reales.</p>
+      
+      <div id="quiz-container">
+        <div class="q-text" id="q-text">Pregunta...</div>
+        <div class="options-list" id="options-container"></div>
+        <div class="explanation" id="q-explanation"></div>
+        <div style="margin-top: 18px; text-align: right;">
+          <button class="btn btn-success" id="next-q-btn" style="display: none;" onclick="nextQuestion()">Siguiente Pregunta ➔</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resumen Final -->
+    <section class="card" id="result-card" style="display: none; text-align: center;">
+      <h2><span>🎉</span> ¡Clase Completada con Éxito!</h2>
+      <p id="result-text" style="font-size: 1.15rem; margin: 14px 0; color: #e2e8f0;"></p>
+      <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); padding: 16px; border-radius: 12px; margin-bottom: 18px; text-align: left;">
+        <strong style="color: #6ee7b7; font-size: 1rem;">📅 Ciclo de Repasos Programado (Método Carlos):</strong>
+        <ul style="margin-left: 20px; margin-top: 8px; font-size: 0.95rem; color: #a7f3d0; line-height: 1.6;">
+          <li id="rep-1-date">Repaso 1 (48h): Innegociable al arrancar la sesión</li>
+          <li id="rep-2-date">Repaso 2 (7 días)</li>
+          <li id="rep-3-date">Repaso 3 (21 días)</li>
+        </ul>
+      </div>
+      <button class="btn" onclick="location.reload()">Aceptar y Finalizar</button>
+    </section>
+
+  </main>
+
+  <script>
+    const knowledgeBase = {
+      "sap": "<b>SAP (Service Access Point):</b> Es el punto de acceso al servicio, la interfaz lógica entre la capa N y la capa superior N+1. Por ejemplo, en programación de red actúa como los sockets o llamadas a funciones en C.",
+      "sdu": "<b>SDU (Service Data Unit):</b> Es el bloque de DATOS PUROS que desciende desde la capa superior. Aún no lleva la cabecera de la capa actual.",
+      "pdu": "<b>PDU (Protocol Data Unit):</b> Es el paquete completo que viaja por la red en la capa N. Se calcula como: <code>PDU = SDU + Cabecera_de_Capa (PCI)</code>. En Capa 4 se llama Segmento, en Capa 3 Paquete/Datagrama, en Capa 2 Trama.",
+      "eui64": "<b>Algoritmo EUI-64 modificado:</b> 1) Tomas la MAC (48 bits). 2) La divides en dos bloques de 24 bits e insertas <code>FF:FE</code> en medio (queda 64 bits). 3) <b>Inviertes el 7º bit</b> del primer byte (bit U/L). Si era 0 pasa a 1, si era 1 pasa a 0.",
+      "mss": "<b>MSS (Maximum Segment Size):</b> Tamaño máximo de datos útiles (payload) que TCP puede recibir en un segmento sin fragmentar. En Ethernet estándar (MTU 1500 bytes), se calcula restando 20B de cabecera IP y 20B de cabecera TCP: <code>MSS = 1500 - 20 - 20 = 1460 bytes</code>.",
+      "protocol": "<b>Campo Protocol en Cabecera IPv4:</b> Identifica el protocolo de nivel superior que viaja en el datagrama: <b>1=ICMP</b>, <b>2=IGMP</b>, <b>6=TCP</b>, <b>17=UDP</b>, <b>50=ESP</b>, <b>51=AH</b>, <b>89=OSPF</b>.",
+      "handshake": "<b>3-Way Handshake de TCP:</b> 1) Cliente envía <code>SYN</code> con su número de secuencia inicial (ISN). 2) Servidor responde <code>SYN + ACK</code>. 3) Cliente envía <code>ACK</code>. A partir de ahí la conexión queda en estado ESTABLISHED.",
+      "nat": "<b>Tipos de NAT:</b><br>• <b>SNAT (Source NAT / Masquerade):</b> Modifica la IP de origen (la privada por la pública del router) para navegar a Internet.<br>• <b>DNAT (Destination NAT / Port Forwarding):</b> Modifica la IP de destino para que peticiones de Internet entren a un servidor interno.<br>• <b>PAT:</b> Traduce puertos además de IPs.",
+      "ipv6": "<b>Direcciones IPv6 clave:</b><br>• <code>FE80::/10</code> = Link-Local (no enrutable, ámbito del enlace local).<br>• <code>FC00::/7</code> = Unique-Local (privada corporativa).<br>• <code>2000::/3</code> = Global Unicast (pública de Internet).<br>• <code>FF00::/8</code> = Multicast (no hay broadcast).<br>• <code>::1/128</code> = Loopback."
+    };
+
+    const explanationsList = [
+      {
+        title: "📌 1. Arquitectura OSI: ¿Qué son SAP, SDU, ICI y PDU?",
+        content: "En las oposiciones de TAI y GSI preguntan esto con fórmulas matemáticas de capas:<br><br>• <b>SAP (Service Access Point):</b> El punto de conexión lógico entre la capa N y la capa superior N+1.<br>• <b>SDU (Service Data Unit):</b> El bloque de datos que desciende desde la capa superior.<br>• <b>ICI (Interface Control Information):</b> Información de control de interfaz que acompaña a la SDU para cruzar el SAP.<br>• <b>IDU:</b> <code>IDU = SDU + ICI</code>.<br>• <b>PDU (Protocol Data Unit):</b> El paquete final: <code>PDU = SDU + Cabecera_de_Capa</code>. En Capa 4 es Segmento, en Capa 3 Datagrama, en Capa 2 Trama y en Capa 1 Bits."
+      },
+      {
+        title: "📌 2. Algoritmo EUI-64 Modificado (Paso a paso)",
+        content: "Carlos lo resume en 3 pasos clave de examen:<br><br>1. <b>Partir la MAC:</b> Se toma la MAC física (48 bits / 6 bytes, ej: <code>00:1A:2B:3C:4D:5E</code>) y se divide en dos bloques de 24 bits.<br>2. <b>Insertar FF:FE:</b> Se introduce el valor constante de 16 bits <code>FF:FE</code> en medio. Queda: <code>001A:2BFF:FE3C:4D5E</code> (64 bits).<br>3. <b>Invertir el 7º bit (Bit U/L):</b> En el primer octeto (<code>00</code> en hex = <code>0000 0000</code> en binario), se invierte el 7º bit contando de izquierda a derecha. Pasa de 0 a 1 (<code>0000 0010</code> = <code>02</code> en hex).<br>• Resultado final: <code>021A:2BFF:FE3C:4D5E</code>."
+      },
+      {
+        title: "📌 3. TCP: Handshake, MSS y Control de Flujo",
+        content: "• <b>3-Way Handshake:</b> 1) Cliente envía SYN. 2) Servidor responde SYN-ACK. 3) Cliente envía ACK.<br>• <b>MSS (Maximum Segment Size):</b> Tamaño máximo de carga útil que TCP puede recibir en un segmento sin fragmentar. En Ethernet (MTU 1500): <code>MSS = 1500 - 20 (IP) - 20 (TCP) = 1460 bytes</code>.<br>• <b>Ventana Deslizante (Window Size):</b> Control de flujo. Si el receptor se satura, envía <code>Window Size = 0</code>, obligando al emisor a pausar el envío."
+      },
+      {
+        title: "📌 4. Números de Protocolo en Cabecera IPv4 (Preguntas seguras)",
+        content: "Campo Protocol de 8 bits en la cabecera IPv4:<br>• <b>1 = ICMP</b> (Ping)<br>• <b>2 = IGMP</b> (Multicast)<br>• <b>6 = TCP</b><br>• <b>17 = UDP</b><br>• <b>50 = ESP</b> (IPsec Cifrado)<br>• <b>51 = AH</b> (IPsec Autenticación)<br>• <b>89 = OSPF</b> (Enrutamiento)"
+      },
+      {
+        title: "📌 5. Tipos de Direcciones IPv6 y Prefijos",
+        content: "En IPv6 <b>no hay broadcast</b> (usa multicast):<br>• <b>Link-Local:</b> <code>FE80::/10</code> (no enrutable, comunicación local, como APIPA).<br>• <b>Unique-Local:</b> <code>FC00::/7</code> o <code>FD00::/8</code> (privadas enrutables en tu LAN).<br>• <b>Global Unicast:</b> <code>2000::/3</code> (públicas de Internet).<br>• <b>Multicast:</b> <code>FF00::/8</code> (ej: <code>FF02::1</code> todos los nodos, <code>FF02::2</code> todos los routers).<br>• <b>Loopback:</b> <code>::1/128</code>."
+      }
+    ];
+
+    function renderExplanations() {
+      const container = document.getElementById('explanations-container');
+      container.innerHTML = explanationsList.map((item, idx) => `
+        <div style="margin-top: 8px;">
+          <button class="expand-btn" onclick="toggleExpand(${idx})">
+            <span>${item.title}</span>
+            <span id="expand-icon-${idx}">▼</span>
+          </button>
+          <div class="expand-body" id="expand-body-${idx}">
+            ${item.content}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleExpand(idx) {
+      const body = document.getElementById(`expand-body-${idx}`);
+      const icon = document.getElementById(`expand-icon-${idx}`);
+      if (body.style.display === 'block') {
+        body.style.display = 'none';
+        icon.innerText = '▼';
+      } else {
+        body.style.display = 'block';
+        icon.innerText = '▲';
+      }
+    }
+
+    function askAI() {
+      const input = document.getElementById('ai-query');
+      const query = input.value.trim().toLowerCase();
+      const respBox = document.getElementById('ai-response');
+      if (!query) return;
+
+      respBox.style.display = 'block';
+      let found = null;
+
+      for (let k in knowledgeBase) {
+        if (query.includes(k)) {
+          found = knowledgeBase[k];
+          break;
+        }
+      }
+
+      if (found) {
+        respBox.innerHTML = `🎓 <b>Explicación del Profesor Carlos:</b><br><br>${found}`;
+      } else {
+        respBox.innerHTML = `🎓 <b>Profesor Carlos:</b><br>Sobre "<b>${input.value}</b>": Puedes consultar el esquema oficial en el PDF B4-T7.1 o preguntarme directamente por términos como <i>SAP, SDU, PDU, EUI-64, MSS, TCP, UDP, NAT, Protocolos IPv4 o IPv6</i>.`;
+      }
+    }
+
+    const quizData = [
+      {
+        q: '¿Cuál es el valor del campo "Protocol" en la cabecera IPv4 cuando el datagrama transporta un paquete ICMP?',
+        options: ['1', '6', '17', '89'],
+        ans: 0,
+        explain: 'Según la tabla de cabecera IPv4 de Carlos: 1=ICMP, 2=IGMP, 6=TCP, 17=UDP, 50=ESP, 51=AH, 89=OSPF.'
+      },
+      {
+        q: 'En IPv6, ¿qué prefijo identifica inequívocamente a una dirección de enlace local (Link-Local, no enrutable)?',
+        options: ['FC00::/7', 'FE80::/10', '2000::/3', 'FF00::/8'],
+        ans: 1,
+        explain: 'FE80::/10 identifica direcciones Link-Local (equivalente a APIPA en IPv4). FC00::/7 es Unique-Local (privada) y FF00::/8 es Multicast.'
+      },
+      {
+        q: 'En el algoritmo EUI-64 modificado para autoconfigurar IPv6, ¿qué valor hexadecimal de 16 bits se inserta en el centro de la MAC y qué bit se invierte?',
+        options: ['Se inserta FF:FE y se invierte el 7º bit', 'Se inserta FE:FF y se invierte el 1º bit', 'Se inserta FF:00 y se invierte el 8º bit', 'Se inserta 00:FF y se invierte el 7º bit'],
+        ans: 0,
+        explain: 'La MAC (48 bits) se parte en dos mitades de 24 bits, se inserta FF:FE en medio (16 bits) y se invierte el 7º bit del primer byte (U/L bit).'
+      },
+      {
+        q: '¿Qué rango de puertos comprende los denominados Well Known Ports (puertos del sistema asignados por IANA)?',
+        options: ['0 a 255', '0 a 1023', '1024 a 49151', '49152 a 65535'],
+        ans: 1,
+        explain: 'Los Well Known Ports van de 0 a 1023 (regla de Carlos: 1023 es 2^10 - 1). De 1024 a 49151 son Registrados y de 49152 a 65535 Dinámicos/Privados.'
+      }
+    ];
+
+    let timerInterval = null;
+    let timeLeft = 25 * 60;
+    let isRunning = false;
+    let currentQ = 0;
+    let score = 0;
+
+    function updateTimerDisplay() {
+      const min = Math.floor(timeLeft / 60);
+      const sec = timeLeft % 60;
+      document.getElementById('time-display').innerText = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById('start-btn');
+      if (isRunning) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        btn.innerText = '▶ Reanudar Estudio';
+      } else {
+        isRunning = true;
+        btn.innerText = '⏸ Pausar';
+        timerInterval = setInterval(() => {
+          if (timeLeft > 0) {
+            timeLeft--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            isRunning = false;
+            alert('⏰ ¡Tiempo de estudio completado! Pasa al test del profesor.');
+            goToQuiz();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      timeLeft = 25 * 60;
+      document.getElementById('start-btn').innerText = '▶ Comenzar Estudio';
+      updateTimerDisplay();
+    }
+
+    function goToQuiz() {
+      document.getElementById('timer-card').style.display = 'none';
+      document.getElementById('lesson-card').style.display = 'none';
+      document.getElementById('quiz-card').style.display = 'block';
+      currentQ = 0;
+      score = 0;
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = quizData[currentQ];
+      document.getElementById('q-text').innerText = `${currentQ + 1}/${quizData.length}. ${q.q}`;
+      const optCont = document.getElementById('options-container');
+      optCont.innerHTML = q.options.map((opt, i) => `
+        <button class="opt-btn" onclick="selectAnswer(${i})">${String.fromCharCode(65 + i)}) ${opt}</button>
+      `).join('');
+      document.getElementById('q-explanation').style.display = 'none';
+      document.getElementById('next-q-btn').style.display = 'none';
+    }
+
+    function selectAnswer(selectedIdx) {
+      const q = quizData[currentQ];
+      const buttons = document.querySelectorAll('.opt-btn');
+      buttons.forEach(b => b.disabled = true);
+
+      if (selectedIdx === q.ans) {
+        buttons[selectedIdx].classList.add('correct');
+        score++;
+      } else {
+        buttons[selectedIdx].classList.add('wrong');
+        buttons[q.ans].classList.add('correct');
+      }
+
+      const exp = document.getElementById('q-explanation');
+      exp.innerHTML = (selectedIdx === q.ans ? "✅ <b>¡Correcto!</b> " : "❌ <b>Atento al detalle:</b> ") + q.explain;
+      exp.style.display = 'block';
+
+      document.getElementById('next-q-btn').style.display = 'inline-block';
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      if (currentQ < quizData.length) {
+        showQuestion();
+      } else {
+        finishSession();
+      }
+    }
+
+    function finishSession() {
+      document.getElementById('quiz-card').style.display = 'none';
+      document.getElementById('result-card').style.display = 'block';
+      document.getElementById('result-text').innerText = `Has obtenido ${score} de ${quizData.length} aciertos en la evaluación.`;
+
+      const today = new Date();
+      function addDays(d, days) {
+        const res = new Date(d);
+        res.setDate(res.getDate() + days);
+        return res.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      }
+
+      document.getElementById('rep-1-date').innerText = `Repaso 1 (+48h): ${addDays(today, 2)} (Innegociable)`;
+      document.getElementById('rep-2-date').innerText = `Repaso 2 (+7 días): ${addDays(today, 9)}`;
+      document.getElementById('rep-3-date').innerText = `Repaso 3 (+21 días): ${addDays(today, 30)}`;
+
+      const record = {
+        topic_id: 'B4-T7',
+        studied_date: today.toISOString().split('T')[0],
+        completed: true,
+        score: `${score}/${quizData.length}`,
+        repaso1: addDays(today, 2)
+      };
+      localStorage.setItem('carlos_B4_T7', JSON.stringify(record));
+    }
+
+    renderExplanations();
+    updateTimerDisplay();
+  </script>
+</body>
+</html>

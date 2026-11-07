@@ -1,0 +1,134 @@
+{
+  "config": {
+    "student_name": "Gabriel",
+    "track": "SISTEMAS",
+    "target_hours_week": 12,
+    "review_intervals_days": [
+      2,
+      7,
+      21
+    ]
+  },
+  "schedule_by_day": {
+    "0": {
+      "block": "B4",
+      "name": "Lunes - Bloque 4 Sistemas"
+    },
+    "1": {
+      "block": "B2",
+      "name": "Martes - Bloque 2 Tecnología"
+    },
+    "2": {
+      "block": "B4",
+      "name": "Miércoles - Bloque 4 Sistemas"
+    },
+    "3": {
+      "block": "B3",
+      "name": "Jueves - Bloque 3 Desarrollo"
+    },
+    "4": {
+      "block": "B4",
+      "name": "Viernes - Bloque 4 Sistemas"
+    },
+    "5": {
+      "block": "B1",
+      "name": "Sábado - Bloque 1 Legislación"
+    },
+    "6": {
+      "block": "PRACTICA",
+      "name": "Domingo - Subnetting, Linux y Práctica"
+    }
+  },
+  "topics": [
+    {
+      "id": "B4-T7",
+      "order": 1,
+      "block": "B4",
+      "title": "Modelo TCP/IP, IPv6 y Protocolos",
+      "estimated_minutes": 45,
+      "reading_minutes": 25,
+      "files": [
+        "05 Bloque 4 - Sistemas/B4-T7.1-TCP IP.pdf",
+        "05 Bloque 4 - Sistemas/B4-T7.1-TCP IP - IPv6.pdf",
+        "05 Bloque 4 - Sistemas/B4-T7.2-TCP IP-PROTOCOLOS.pdf",
+        "05 Bloque 4 - Sistemas/B4-T7.3-TCP IP - Libro alumno.pdf"
+      ],
+      "key_concepts": [
+        "Modelo OSI (7 capas) vs TCP/IP (4 capas). Nivel 2: switching, Nivel 3: routing.",
+        "Cabecera IPv4 (20-60 bytes). Flags: MF, DF. Protocolos: ICMP=1, IGMP=2, TCP=6, UDP=17, OSPF=89.",
+        "IPv6: 128 bits, cabecera fija de 40 bytes. No hay broadcast. Link-Local FE80::/10, Unique-Local FC00::/7, Global 2000::/3.",
+        "Algoritmo EUI-64 modificado: divide MAC 48 bits, inserta FF:FE en medio e invierte el 7º bit.",
+        "TCP: orientado a conexión, 3-way handshake (SYN, SYN-ACK, ACK), control de flujo por ventana.",
+        "Puertos Well-Known (0-1023), Registrados (1024-49151), Dinámicos (49152-65535)."
+      ],
+      "quiz": [
+        {
+          "q": "¿Cuál es el valor del campo Protocol en la cabecera IPv4 cuando el datagrama transporta un paquete ICMP?",
+          "options": [
+            "1",
+            "6",
+            "17",
+            "89"
+          ],
+          "ans": 0,
+          "explain": "Según la tabla de cabecera IPv4 de Carlos: 1=ICMP, 2=IGMP, 6=TCP, 17=UDP, 50=ESP, 51=AH, 89=OSPF."
+        },
+        {
+          "q": "En IPv6, ¿qué prefijo identifica inequívocamente a una dirección de enlace local (Link-Local, no enrutable)?",
+          "options": [
+            "FC00::/7",
+            "FE80::/10",
+            "2000::/3",
+            "FF00::/8"
+          ],
+          "ans": 1,
+          "explain": "FE80::/10 identifica direcciones Link-Local (equivalente a APIPA en IPv4). FC00::/7 es Unique-Local (privada) y FF00::/8 es Multicast."
+        },
+        {
+          "q": "En el algoritmo EUI-64 modificado para autoconfigurar IPv6, ¿qué valor hexadecimal de 16 bits se inserta en el centro de la MAC y qué bit se invierte?",
+          "options": [
+            "Se inserta FF:FE y se invierte el 7º bit",
+            "Se inserta FE:FF y se invierte el 1º bit",
+            "Se inserta FF:00 y se invierte el 8º bit",
+            "Se inserta 00:FF y se invierte el 7º bit"
+          ],
+          "ans": 0,
+          "explain": "La MAC (48 bits) se parte en dos mitades de 24 bits, se inserta FF:FE en medio (16 bits) y se invierte el 7º bit del primer byte (U/L bit)."
+        },
+        {
+          "q": "¿Qué rango de puertos comprende los denominados Well Known Ports (puertos del sistema asignados por IANA)?",
+          "options": [
+            "0 a 255",
+            "0 a 1023",
+            "1024 a 49151",
+            "49152 a 65535"
+          ],
+          "ans": 1,
+          "explain": "Los Well Known Ports van de 0 a 1023 (regla de Carlos: 1023 es 2^10 - 1). De 1024 a 49151 son Registrados y de 49152 a 65535 Dinámicos/Privados."
+        }
+      ]
+    },
+    {
+      "id": "B2-T4",
+      "order": 2,
+      "block": "B2",
+      "title": "Sistemas Operativos y Administración Linux",
+      "estimated_minutes": 45,
+      "reading_minutes": 25,
+      "files": [
+        "03 Bloque 2 - Tecnología/B2-T4-SSOO.pdf",
+        "03 Bloque 2 - Tecnología/B2-T4.3-LINUX.pdf",
+        "03 Bloque 2 - Tecnología/B2-T4.3.2-LINUX-COMANDOS.pdf",
+        "03 Bloque 2 - Tecnología/B2-T4.3.3-LINUX-FICHEROS.pdf"
+      ],
+      "key_concepts": [
+        "Estructura de SSOO: Monolítico, Microkernel, Modular y Cliente-Servidor.",
+        "Estados de proceso: New, Ready, Running, Waiting, Terminated.",
+        "Linux: Ficheros de configuración /etc/profile, ~/.bashrc, /etc/sysctl.conf.",
+        "Comandos y permisos: chmod (u,g,o,a), umask, chown, comandos de red y administración."
+      ],
+      "quiz": []
+    }
+  ],
+  "study_sessions": []
+}

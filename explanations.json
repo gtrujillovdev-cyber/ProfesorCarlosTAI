@@ -1,0 +1,24 @@
+{
+  "B4-T7": {
+    "SAP_SDU_PDU": {
+      "title": "SAP, SDU, ICI y PDU (Arquitectura OSI explicada)",
+      "explanation": "En las oposiciones de TAI y GSI preguntan esto con fórmulas de capas:\n\n• <b>SAP (Service Access Point):</b> Es el punto de acceso al servicio, la interfaz lógica entre la capa N y la capa superior N+1.\n• <b>SDU (Service Data Unit):</b> Es el bloque de datos que desciende desde la capa superior.\n• <b>ICI (Interface Control Information):</b> Información de control de interfaz que acompaña temporalmente a la SDU para cruzar el SAP.\n• <b>IDU (Interface Data Unit):</b> La unidad de intercambio a través del SAP: <code>IDU = SDU + ICI</code>.\n• <b>PDU (Protocol Data Unit):</b> Es el paquete final que viaja por la red en la capa N: <code>PDU = SDU + Cabecera_de_Capa (PCI)</code>. En transporte se llama Segmento, en red Datagrama/Paquete, en enlace Trama y en físico Bits."
+    },
+    "IPv6_EUI64": {
+      "title": "Algoritmo EUI-64 Modificado (Paso a paso para examen)",
+      "explanation": "Carlos lo resume en 3 pasos clave porque cae en supuestos prácticos:\n\n1. <b>Partir la MAC:</b> Se toma la MAC física (48 bits / 6 bytes, ej: <code>00:1A:2B:3C:4D:5E</code>) y se divide en dos bloques de 24 bits.\n2. <b>Insertar FF:FE:</b> Se introduce el valor constante de 16 bits <code>FF:FE</code> en medio. Queda: <code>001A:2BFF:FE3C:4D5E</code> (64 bits).\n3. <b>Invertir el 7º bit (Bit U/L):</b> En el primer octeto (<code>00</code> en hexadecimal = <code>0000 0000</code> en binario), se invierte el 7º bit contando de izquierda a derecha (bit Universal/Local). Pasa de <code>0</code> a <code>1</code> (<code>0000 0010</code> = <code>02</code> en hex).\n• Resultado final del Interface ID: <code>021A:2BFF:FE3C:4D5E</code>."
+    },
+    "TCP_Handshake_MSS": {
+      "title": "TCP: 3-Way Handshake, MSS y Control de Flujo",
+      "explanation": "Detalles imprescindibles de la cabecera y operativa TCP:\n\n• <b>3-Way Handshake:</b> 1) Cliente envía <code>SYN</code> (con su número de secuencia inicial ISN). 2) Servidor responde <code>SYN + ACK</code>. 3) Cliente confirma con <code>ACK</code>.\n• <b>MSS (Maximum Segment Size):</b> Tamaño máximo de datos útiles (payload) que TCP puede recibir en un segmento sin fragmentar. Fórmula: <code>MSS = MTU - Cabecera_IP (20B) - Cabecera_TCP (20B)</code>. En Ethernet estándar (MTU 1500), el MSS es de <b>1460 bytes</b>.\n• <b>Ventana Deslizante (Window Size):</b> Control de flujo. Si el receptor se satura de datos, responde con <code>Window Size = 0</code>, obligando al emisor a pausar el envío."
+    },
+    "IPv4_Protocol_Numbers": {
+      "title": "Números de Protocolo en la Cabecera IPv4 (Preguntas seguras)",
+      "explanation": "El campo 'Protocol' de la cabecera IPv4 tiene 8 bits e indica a qué protocolo de capa superior pertenece el contenido:\n\n• <b>1 = ICMP</b> (Ping, mensajes de error y traceroute)\n• <b>2 = IGMP</b> (Gestión de pertenencia a grupos multicast)\n• <b>6 = TCP</b> (Transmisión fiable orientada a conexión)\n• <b>17 = UDP</b> (Transmisión rápida sin conexión)\n• <b>50 = ESP</b> (IPsec: Encapsulating Security Payload - Cifrado)\n• <b>51 = AH</b> (IPsec: Authentication Header - Integridad/Firma)\n• <b>89 = OSPF</b> (Enrutamiento jerárquico por estado de enlace)"
+    },
+    "IPv6_Tipos_Direcciones": {
+      "title": "Tipos y Prefijos de Direcciones IPv6",
+      "explanation": "En IPv6 <b>no existe el broadcast</b> (se sustituye por multicast):\n\n• <b>Link-Local (Enlace Local):</b> Prefijo <code>FE80::/10</code>. No son enrutables, sirven para comunicación entre vecinos en el mismo enlace físico y autoconfiguración (equivalente a APIPA 169.254.x.x en IPv4).\n• <b>Unique-Local (Locales Únicas):</b> Prefijo <code>FC00::/7</code> (habitualmente <code>FD00::/8</code>). Son las direcciones privadas enrutables dentro de tu red corporativa (equivalente a 10.x, 172.16.x, 192.168.x).\n• <b>Global Unicast:</b> Prefijo <code>2000::/3</code>. Direcciones públicas enrutables en Internet.\n• <b>Multicast:</b> Prefijo <code>FF00::/8</code>. Ejemplos: <code>FF02::1</code> (todos los nodos del enlace local), <code>FF02::2</code> (todos los routers del enlace local).\n• <b>Loopback:</b> <code>::1/128</code> (frente a 127.0.0.1/8 en IPv4)."
+    }
+  }
+}
